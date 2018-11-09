@@ -1,0 +1,6 @@
+<?php 
+$SubparentId = Mage::getModel('catalog/category')->load($subcatId)->getParentId();
+if ($SubparentId == 4) {
+	echo "Buy";
+}
+?>

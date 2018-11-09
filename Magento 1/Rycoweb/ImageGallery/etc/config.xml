@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<config>
+    <modules>
+        <Rycoweb_ImageGallery>
+            <version>1.0.0</version>
+        </Rycoweb_ImageGallery>
+    </modules>
+    <!-- Frontend Router -->
+    <frontend>
+        <routers>
+            <imagegallery>
+                <use>standard</use>
+                <args>
+                    <module>Rycoweb_ImageGallery</module>
+                    <frontName>imagegallery</frontName>
+                </args>
+            </imagegallery>
+        </routers>
+        <layout>
+            <updates>
+                <imagegallery>
+                    <file>imagegallery.xml</file>
+                </imagegallery>
+            </updates>
+        </layout>
+    </frontend>
+    <!-- EOF Frontend Router -->
+	
+    <!-- Admin Router -->
+    <admin>
+        <routers>
+            <adminhtml>
+				<args>
+					<modules>
+						<imagegallery before="Mage_Adminhtml">Rycoweb_ImageGallery_Adminhtml</imagegallery>
+					</modules>
+				</args>
+			</adminhtml>
+        </routers>
+    </admin>
+    <!-- EOF Admin Router -->
+
+    <!-- Admin Menu and ACL -->
+    <adminhtml>
+        <menu>
+            <imagegallery module="imagegallery">
+                <title>Image Gallery</title>
+                <sort_order>71</sort_order>               
+                <children>
+                    <items module="imagegallery">
+                        <title>Manage Image Gallery</title>
+                        <sort_order>0</sort_order>
+                        <action>adminhtml/imagegallery_imagegallery</action>
+                    </items>
+                    <config module="imagegallery">
+                        <title>Gallery Configuration</title>
+                        <sort_order>1</sort_order>
+                        <action>adminhtml/system_config/edit/section/imagegallery/</action>
+                    </config>
+                </children>
+            </imagegallery>
+        </menu>
+        <acl>
+            <resources>
+                <all>
+                    <title>Allow Everything</title>
+                </all>
+                <admin>
+                    <children>
+                        <Rycoweb_ImageGallery>
+                            <title>Image Gallery Module</title>
+							<children>
+                                <items>
+                                    <title>Manage Image Gallery</title>
+                                    <sort_order>1</sort_order>
+                                </items>
+                                <config>
+                                    <title>Gallery Configuration</title>
+                                    <sort_order>2</sort_order>
+                                </config>
+                            </children>
+                        </Rycoweb_ImageGallery>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <imagegallery translate="title" module="imagegallery"> 
+                                            <title>Image Gallery Settings</title>
+                                            <sort_order>50</sort_order>
+                                        </imagegallery>
+                                    </children>							
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+        <layout>
+            <updates>
+                <imagegallery>
+                    <file>imagegallery.xml</file>
+                </imagegallery>
+            </updates>
+        </layout>
+    </adminhtml>   
+    <!-- EOF Admin menu and ACL -->
+
+    <!-- Global Setting -->
+    <global>
+        <models>
+            <imagegallery>
+                <class>Rycoweb_ImageGallery_Model</class>
+                <resourceModel>imagegallery_mysql4</resourceModel>
+            </imagegallery>
+            <imagegallery_mysql4>
+                <class>Rycoweb_ImageGallery_Model_Mysql4</class>
+                <entities>
+                    <imagegallery>
+                        <table>imagegallery</table>
+                    </imagegallery>
+                </entities>
+            </imagegallery_mysql4>
+        </models>
+        <resources>
+            <imagegallery_setup>
+                <setup>
+                    <module>Rycoweb_ImageGallery</module>
+                </setup>
+                <connection>
+                    <use>core_setup</use>
+                </connection>
+            </imagegallery_setup>
+            <imagegallery_write>
+                <connection>
+                    <use>core_write</use>
+                </connection>
+            </imagegallery_write>
+            <imagegallery_read>
+                <connection>
+                    <use>core_read</use>
+                </connection>
+            </imagegallery_read>
+        </resources>
+        <blocks>
+            <imagegallery>
+                <class>Rycoweb_ImageGallery_Block</class>
+            </imagegallery>
+        </blocks>
+        <helpers>
+            <imagegallery>
+                <class>Rycoweb_ImageGallery_Helper</class>
+            </imagegallery>
+        </helpers>
+    </global>
+    <!-- EOF Global -->
+</config>

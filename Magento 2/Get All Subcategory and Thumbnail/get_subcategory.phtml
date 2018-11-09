@@ -1,0 +1,35 @@
+
+<?php 
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$subcategories=$this->getLayer()->getCurrentCategory()->getCategories($this->getLayer()->getCurrentCategory()->getId());
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$baseUrl = $storeManager->getStore()->getBaseUrl();
+$mediaUrl = $storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+?>
+<div class="list-subcategory">
+    <div class="row">
+        <?php 
+        foreach($subcategories as $subcategory){ 
+            $_category = $objectManager->create('Magento\Catalog\Model\Category')->load($subcategory->getId());
+            ?>
+            <?php if($subcategory->getIsActive()): ?>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="category-item">
+                        <a href="<?php echo $baseUrl.$subcategory->getData('request_path'); ?>" title="<?php echo $subcategory->getName(); ?>">
+                            <span class="subcategory-image">
+                                <?php if ($_category->getThumbnail()): ?>
+                                    <img src="<?php echo  $mediaUrl.'catalog/category/'.$_category->getThumbnail(); ?>" alt="<?php echo $subcategory->getName(); ?>">
+                                <?php else: ?>
+                                    <img src="<?php echo $mediaUrl; ?>wysiwyg/small_image.jpg" alt="">
+                                <?php endif; ?>
+                            </span>
+                            <h3><?php echo $subcategory->getName(); ?></h3>
+                        </a>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <?php
+        } 
+        ?> 
+    </div>
+</div>

@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Special Promotions for shopping Cart Promotions
+ * @category    Rycoweb
+ * @package     Rycoweb_SpecialPromotions
+ */
+-->
+<config>
+    <modules>
+        <Rycoweb_SpecialPromotions>
+            <version>1.0.1</version>
+        </Rycoweb_SpecialPromotions>
+    </modules>
+    <global>
+        <helpers>
+            <specialpromotions>
+                <class>Rycoweb_SpecialPromotions_Helper</class>
+            </specialpromotions>
+        </helpers>
+        <blocks>
+            <adminhtml>
+                <rewrite>
+                    <promo_quote_edit_tab_actions>Rycoweb_SpecialPromotions_Block_Adminhtml_Promo_Quote_Edit_Tab_Actions</promo_quote_edit_tab_actions>
+                </rewrite>
+            </adminhtml>
+        </blocks>
+        <models>
+            <rycoweb_specialpromotions>
+                <class>Rycoweb_SpecialPromotions_Model</class>
+            </rycoweb_specialpromotions>
+            <sales>
+                <rewrite>
+                    <quote_address>Rycoweb_SpecialPromotions_Model_Quote_Address</quote_address>
+                </rewrite>
+            </sales>
+            <salesrule>
+                <rewrite>
+                    <rule>Rycoweb_SpecialPromotions_Model_Rule</rule>
+                    <validator>Rycoweb_SpecialPromotions_Model_Validator</validator>
+                </rewrite>
+            </salesrule>
+        </models>
+        <resources>
+            <rycoweb_specialpromotions_setup>
+                <setup>
+                    <module>Rycoweb_SpecialPromotions</module>
+                    <class>Mage_Catalog_Model_Resource_Setup</class>
+                </setup>
+            </rycoweb_specialpromotions_setup>
+        </resources>
+        <sales>
+            <quote>
+                <item>
+                    <product_attributes>
+                        <bulk_price/>
+                    </product_attributes>
+                </item>
+            </quote>
+        </sales>
+        <fieldsets>
+            <sales_convert_quote_item>
+                <bulk_price>
+                    <to_order_item>*</to_order_item>
+                </bulk_price>
+            </sales_convert_quote_item>
+            <sales_convert_order_item>
+                <bulk_price>
+                    <to_quote_item>*</to_quote_item>
+                </bulk_price>
+            </sales_convert_order_item>
+        </fieldsets>
+
+        <events>
+            <sales_quote_item_set_product>
+                <observers>
+                    <rycoweb_specialpromotions>
+                        <class>rycoweb_specialpromotions/observer</class>
+                        <method>salesQuoteItemSet</method>
+                    </rycoweb_specialpromotions>
+                </observers>
+            </sales_quote_item_set_product>
+            <checkout_cart_save_before>
+                <observers>
+                    <rycoweb_cart_update>
+                        <class>rycoweb_specialpromotions/observer</class>
+                        <method>updateCartForRules</method>
+                    </rycoweb_cart_update>
+                </observers>
+            </checkout_cart_save_before>
+        </events>
+    </global>
+    <adminhtml>
+        <translate>
+            <modules>
+                <Rycoweb_SpecialPromotions>
+                    <files>
+                        <default>Rycoweb_SpecialPromotions.csv</default>
+                    </files>
+                </Rycoweb_SpecialPromotions>
+            </modules>
+        </translate>
+    </adminhtml>
+</config>

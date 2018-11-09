@@ -1,0 +1,11 @@
+<?php
+	$layer = Mage::getSingleton('catalog/layer');
+	$_categories = $layer->getCurrentCategory();
+	$currentCategoryId= $_categories->getId();
+	$imageName = Mage::getModel('catalog/category')->load($currentCategoryId)->getImage();
+	$mediaUrl = Mage::getBaseUrl(Mage_Core_Model_Store::URL_TYPE_MEDIA);
+	$urlimage = $mediaUrl.'catalog/category/'.$imageName; 
+?>
+<div class="category-images">
+	<img src="<?php echo $urlimage ?>" alt="">
+</div>

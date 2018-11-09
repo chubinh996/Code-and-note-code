@@ -1,0 +1,25 @@
+<?php
+/*
+ *
+ */
+?>
+<?php $_helper = $this->helper('Magento\Catalog\Helper\Output') ?>
+<?php $_products = $this->getProductCollection() ?>
+<?php if (count($_products) > 0): ?>
+	<div class="shortcode-product">
+		<ol class="products">
+			<?php for($i = 0; $i<= 7;$i++): ?>
+			<?php foreach($_products as $_product): ?>
+				<li>
+					<a href="<?php echo $_product->getProductUrl() ?>" class="product photo product-item-photo">
+						<?php echo $this->getImage($_product, 'category_page_list')->toHtml() ?>
+					</a> 
+					<strong class="product name product-item-name">
+						<a class="product-item-link" href="<?php echo $_product->getProductUrl() ?>"><?php echo $_helper->productAttribute($_product, $_product->getName(), 'name') ?></a>
+					</strong>
+				</li>
+			<?php endforeach; ?>
+			<?php endfor; ?>
+		</ol>
+	</div>
+<?php endif; ?>

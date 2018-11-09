@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<referenceContainer name="content">
+			<container name="layout_detail_custom" htmlTag="div" htmlClass="rows" before="-">
+				<container name="layout_detail_left" htmlTag="div" htmlClass="col-md-4">
+
+				</container>
+				<container name="layout_detail_right" htmlTag="div" htmlClass="col-md-8">
+					<container name="layout_detail_custom_row" htmlTag="div" htmlClass="row" before="-">
+						<container name="layout_detail_product_left" htmlTag="div" htmlClass="col-md-8">
+							<block class="Magento\Catalog\Block\Product\View" name="delivery" template="Magento_Catalog::product/view/attribute.phtml" >
+								<arguments>
+									<argument name="at_call" xsi:type="string">getProductDelivery</argument>
+									<argument name="at_code" xsi:type="string">product_delivery</argument>
+									<argument name="css_class" xsi:type="string">delivery</argument>
+									<argument name="at_label" xsi:type="string">none</argument>
+								</arguments>
+							</block>
+							<block name="brand_product" class="Magento\Catalog\Block\Product\View" template="Magento_Catalog::product/view/brand_product.phtml" />
+						</container>
+
+						<container name="layout_detail_product_right" htmlTag="div" htmlClass="col-md-4">
+							<block class="Magento\Cms\Block\Block" name="trustpilot">
+								<arguments>
+									<argument name="block_id" xsi:type="string">trustpilot</argument>
+								</arguments>
+							</block>
+						</container>
+					</container>
+				</container>
+			</container>
+			
+
+		</referenceContainer>
+		
+		<referenceBlock name="product.info.details">
+			<block class="Magento\Catalog\Block\Product\View" name="description.tab" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info" >
+				<arguments>
+					<argument name="at_call" xsi:type="string">getDescription</argument>
+					<argument name="at_code" xsi:type="string">description</argument>
+					<argument name="css_class" xsi:type="string">descriptions</argument>
+					<argument name="at_label" xsi:type="string">none</argument>
+					<argument translate="true" name="title" xsi:type="string">DESCRIPTION</argument>
+				</arguments>
+			</block>
+
+			<block class="Magento\Catalog\Block\Product\View" name="features.tab" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info" >
+				<arguments>
+					<argument name="at_call" xsi:type="string">getProductFeatures</argument>
+					<argument name="at_code" xsi:type="string">product_features</argument>
+					<argument name="css_class" xsi:type="string">features</argument>
+					<argument name="at_label" xsi:type="string">none</argument>
+					<argument translate="true" name="title" xsi:type="string">FEATURES</argument>
+				</arguments>
+			</block>
+
+			<block class="Magento\Catalog\Block\Product\View" name="specifications.tab" template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info" >
+				<arguments>
+					<argument name="at_call" xsi:type="string">getProductSpecifications</argument>
+					<argument name="at_code" xsi:type="string">product_specifications</argument>
+					<argument name="css_class" xsi:type="string">specifications</argument>
+					<argument name="at_label" xsi:type="string">none</argument>
+					<argument translate="true" name="title" xsi:type="string">SPECIFICATIONS</argument>
+				</arguments>
+			</block>
+		</referenceBlock>
+
+		<move element="product.info.main" destination="layout_detail_product_right" />
+		<move element="product.info.media" destination="layout_detail_left" />
+		<move element="product.info.stock.sku" destination="layout_detail_product_left" after="page.main.title"/>
+		<move element="product.info.overview" destination="layout_detail_product_left"/>
+		<move element="product.info.details" destination="layout_detail_right"/>
+		<move element="brand_product" destination="layout_detail_product_left" after="-"/>
+		<move element="trustpilot" destination="layout_detail_product_right" after="-"/>
+		<move element="page.main.title" destination="layout_detail_product_left" before="-"/>
+		<move element="delivery" destination="layout_detail_product_left" after="product.info.overview"/>
+		<move element="product.info.type" destination="product.info.form.content" before="-"/>
+
+		<block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.relateds" template="Magento_Catalog::product/list/items_related.phtml" after="-" />
+		<move element="catalog.product.relateds" destination="content" after="-"/>
+		<move element="breadcrumbs" destination="page.wrapper" before="main.content"/>
+		
+		<block class="Magento\Catalog\Block\Product\View\Description" name="attribute_description" template="Magento_Catalog::product/view/description_attribute.phtml"/>
+		<move element="attribute_description" destination="layout_detail_product_left" after="product.info.overview"/>
+
+		<referenceBlock name="product.info.description" remove="true" />
+		<referenceBlock name="product.attributes" remove="true" />
+		<referenceBlock name="reviews.tab" remove="true" />
+
+
+	</body>
+</page>

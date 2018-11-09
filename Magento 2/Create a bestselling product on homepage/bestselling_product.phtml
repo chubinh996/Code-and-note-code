@@ -1,0 +1,126 @@
+<?php
+if ($exist = ($this->getBestsellerProduct() && $this->getBestsellerProduct()->getPageSize())) {
+    $helper = $this->helper('Magento\Catalog\Helper\Output');
+    $productCollection = $this->getBestsellerProduct();
+    $productCount = $this->getProductLimit();
+    $imageWidth = $this->getProductImageWidth();
+    $imageHeight = $this->getProductimageHeight();
+    $type = 'widget-bestseller-grid';
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+}
+?>
+<?php if ($exist): ?>
+    <div class="block-bestseller-products">
+        <div class="block-title">
+            <h2><?php echo __('Best ') ?><span><?php echo __('Selling') ?></span><?php echo __(' Products') ?></h2>
+        </div>
+    </div>
+    <div class="block-content">
+        <div class="bestseller-block owl-carousel">
+            <?php
+            foreach ($productCollection as $item):
+                $_product = $objectManager->create('Magento\Catalog\Model\Product')->load($item->getProductId());
+                ?>
+                <?php $listProduct = $objectManager->create('Magento\Catalog\Block\Product\ListProduct'); ?>
+                <div class="bestselling-item">
+                <div class="product-item-info-block">
+                    <?php
+                    $image_url = $block->imageHelperObj()->init($_product, 'product_page_image_small')
+                            ->setImageFile($_product->getFile())
+                            ->resize($imageWidth, $imageHeight)
+                            ->getUrl();
+                    ?>
+                    <a href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>" class="product-bestseller-photo">
+                        <img src="<?php echo $image_url; ?>" alt="<?php echo $this->escapeHtml($_product->getName()) ?>" />
+                    </a>
+                    <div class="product-bestseller-details">
+                        <strong class="product-bestseller-name">
+                            <a title="<?php echo $block->escapeHtml($_product->getName()) ?>"
+                               href="<?php /* @escapeNotVerified */ echo $_product->getProductUrl() ?>"
+                               class="product-bestseller-link">
+                                   <?php echo $block->escapeHtml($_product->getName()) ?>
+                            </a>
+                        </strong>
+                        <div class="price-info-product">
+                            <?php
+                            echo $this->getProductPriceHtml($_product, $type);
+                            // echo $objectManager->create('Magento\Catalog\Block\Product\ListProduct')->getProductPrice($_product);
+                            ?>
+                            <div class="product-bestseller-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()): ?>
+                                        <?php $postParams = $listProduct->getAddToCartPostParams($_product); ?>
+                                        <form data-role="tocart-form" data-product-sku="<?= $listProduct->escapeHtml($_product->getSku()) ?>" action="<?= /* @NoEscape */ $postParams['action'] ?>" method="post">
+                                            <?= $listProduct->getBlockHtml('formkey') ?>
+                                            <div class="qty-changer">
+                                                <div>
+                                                    <input  type="number" 
+                                                            name="qty"
+                                                            class="form-control"
+                                                            maxlength="12"
+                                                            value="1"
+                                                            title="<?php echo __('Qty') ?>" class="input-text qty"
+                                                            data-validate="<?php echo $block->escapeHtml(json_encode($block->getQuantityValidators())) ?>" 
+                                                            min="1"
+                                                            />
+                                                </div>
+                                            </div>
+                                            <button type="submit"
+                                                    title="<?= __('Add to Basket') ?>"
+                                                    class="action tocart primary">
+                                                    <span><?= __('Add to Basket') ?></span>
+                                            </button>
+
+                                        </form>
+                                    <?php else: ?>
+                                        <div class="stock unavailable">
+                                            <span><?php /* @escapeNotVerified */ echo __('Out of stock') ?></span>
+                                            <svg class="svg-inline--fa fa-times-circle fa-w-16" aria-hidden="true" data-prefix="fas" data-icon="times-circle" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" data-fa-i2svg=""><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z"></path></svg>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <?php if (!$listProduct->isRedirectToCartEnabled()) : ?>
+                    <script type="text/x-magento-init">
+                        {
+                            "[data-role=tocart-form], .form.map.checkout": {
+                            "catalogAddToCart": {
+                            "product_sku": "<?=  $_product->getSku() ?>"
+                            }
+                            }
+                        }
+                    </script>
+                <?php endif; ?>
+                </div>
+            <?php endforeach ?>
+        </div>
+    </div>
+<?php endif; ?>
+<script>
+    require(['jquery','aht/custom/owl.carousel'],function($){
+        $('.bestseller-block').owlCarousel({
+            loop: true,
+            margin: 10,
+            dots: false,
+            nav: true,
+            navText: ["<i class='fas fa-chevron-left fa-2x'></i>", "<i class='fas fa-chevron-right fa-2x'></i>"],
+            responsive: {
+              0: {
+                items: 1
+              },
+              600: {
+                items: 2
+              },
+              900: {
+                items: 3
+              },
+              1000: {
+                items: 4
+              }
+            }
+        });
+    });
+</script>

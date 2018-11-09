@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+*  Shippit Pty Ltd
+*
+*  NOTICE OF LICENSE
+*
+*  This source file is subject to the terms
+*  that is available through the world-wide-web at this URL:
+*  http://www.shippit.com/terms
+*
+*  @category   Shippit
+*  @copyright  Copyright (c) Shippit Pty Ltd (http://www.shippit.com)
+*  @author     Matthew Muscat <matthew@mamis.com.au>
+*  @license    http://www.shippit.com/terms
+*/
+-->
+<layout>
+    <adminhtml_shippit_order_grid>
+        <update handle="formkey"/>
+
+        <block type="shippit/adminhtml_sales_order_grid" name="shippit.sales.order.grid" output="toHtml" />
+    </adminhtml_shippit_order_grid>
+
+    <adminhtml_shippit_shipment_grid>
+        <update handle="formkey"/>
+
+        <block type="shippit/adminhtml_sales_shipment_grid" name="shippit.sales.shipment.grid" output="toHtml" />
+    </adminhtml_shippit_shipment_grid>
+
+    <adminhtml_sales_order_view>
+        <reference name="order_tab_info">
+            <action method="setTemplate">
+                <template>shippit/sales/order/view/tab/info.phtml</template>
+            </action>
+
+            <block type="core/text_list" name="order_info_shipping" />
+        </reference>
+
+        <reference name="order_info_shipping">
+            <block type="shippit/adminhtml_sales_order_view_info" name="shippit.sales.order.shipping.options" template="shippit/sales/order/view/shipping/options.phtml" />
+        </reference>
+    </adminhtml_sales_order_view>
+</layout>

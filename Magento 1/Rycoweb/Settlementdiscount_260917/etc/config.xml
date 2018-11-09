@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<modules>
+        <Rycoweb_Settlementdiscount>
+            <version>1.0.0</version>
+        </Rycoweb_Settlementdiscount>
+    </modules>
+    
+	<global>
+		<helpers>
+             <settlementdiscount>
+                <class>Rycoweb_Settlementdiscount_Helper</class>
+             </settlementdiscount>
+        </helpers>
+	</global>
+	<admin>
+        <routers>
+            <adminhtml>
+                <args>
+                    <modules>
+                    	<settlementdiscount before="Mage_Adminhtml">Rycoweb_Settlementdiscount_Adminhtml</settlementdiscount>
+                   		<!--adminexample after="Mage_Adminhtml">Inchoo_AdminExample_Adminhtml</adminexample-->
+                    </modules>
+                </args>
+            </adminhtml>
+        </routers>
+	</admin>
+	<adminhtml>
+		<acl>
+            <resources>
+                <admin>
+                    <children>
+                        <system>
+                            <children>
+                                <config>
+                                    <children>
+                                        <settlementdiscount translate="title" module="settlementdiscount">
+                                            <title>Settlement Discount</title>
+                                            <sort_order>50</sort_order>
+                                        </settlementdiscount>
+                                    </children>
+                                </config>
+                            </children>
+                        </system>
+                    </children>
+                </admin>
+            </resources>
+        </acl>
+	</adminhtml>
+
+</config>

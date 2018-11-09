@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Rycoweb_CategoryNavigation>
+            <version>1.0.0</version>
+        </Rycoweb_CategoryNavigation>
+    </modules>   
+    <global>
+        <blocks>
+            <categorynavigation>
+                <class>Rycoweb_CategoryNavigation_Block</class>
+            </categorynavigation>
+        </blocks>
+    </global>
+</config>

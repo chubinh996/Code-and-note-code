@@ -1,0 +1,9 @@
+<div class="save-price"> 
+    <?php 
+        $regprice = $priceModel->getValue();
+        $finprice = $finalPriceModel->getValue();
+
+        $savingpercent = 100- round(($finprice / $regprice)*100); 
+        echo "<span>Save ".$savingpercent."%</span>";
+    ?> 
+</div>

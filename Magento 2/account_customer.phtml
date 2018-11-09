@@ -1,0 +1,15 @@
+<ul class="account-link">
+<?php
+	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+	$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+	$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+	if($customerSession->isLoggedIn()) {
+?>
+	<li><a href="<?php echo $storeManager->getStore()->getBaseUrl().'customer/account/'?>"><?php echo __('My account');?></a></li>
+<?php
+	}else{
+?>
+	<li><a href="<?php echo $storeManager->getStore()->getBaseUrl().'customer/account/login'?>"><?php echo __('Login');?></a></li>
+	<li><a href="<?php echo $storeManager->getStore()->getBaseUrl().'customer/account/create'?>"><?php echo __('Create an account');?></a></li>
+<?php }?>
+</ul>

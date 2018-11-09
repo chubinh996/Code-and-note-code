@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="FishPig\WordPress\Model\Post">
+	  <plugin name="FishPig_WordPress_PluginShortcodeWidget" type="FishPig\WordPress_PluginShortcodeWidget\Plugin\FishPig_WordPress\Model\PostPlugin"/>
+	</type>
+	<type name="FishPig\WordPress\Model\ShortcodeManager">
+		<arguments>
+			<argument name="shortcodes" xsi:type="array">
+				<item name="psw" xsi:type="object">FishPig\WordPress_PluginShortcodeWidget\Model\Shortcode</item>
+				<item name="oembed" xsi:type="object">FishPig\WordPress_PluginShortcodeWidget\Model\Shortcode\oEmbedShortcode</item>
+				<item name="product" xsi:type="object">FishPig\WordPress_PluginShortcodeWidget\Model\Shortcode\ProductShortcode</item>
+			</argument>
+		</arguments>
+	</type>
+</config>

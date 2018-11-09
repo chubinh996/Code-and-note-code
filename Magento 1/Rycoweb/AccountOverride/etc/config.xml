@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Rycoweb_AccountOverride>
+            <version>1.0.0</version>
+        </Rycoweb_AccountOverride>
+    </modules>
+    <frontend>
+        <routers>
+            <customer>
+                <args>
+                    <modules>
+                        <rycoweb_accountoverride before="Mage_Customer">Rycoweb_AccountOverride</rycoweb_accountoverride>
+                    </modules>
+                </args>
+            </customer>
+        </routers>
+    </frontend>
+
+</config>

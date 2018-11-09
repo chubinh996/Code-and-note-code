@@ -1,0 +1,76 @@
+<script type="text/javascript">
+	require(['jquery','jquery/ui'],function($) {
+		var imageBeseller = $('.bestselling-item .product-bestseller-photo');
+		var priceBeseller = $('.product-bestseller-details .price-box.price-final_price');
+		var nameBeseller = $('.product-bestseller-details .product-bestseller-name a');
+		var nameProduct = $('.product-item-name');
+		var nameCategory = $('.category-item h3');
+		var priceRelated = $('.block.related .price-box');
+		function setHeight(item) {
+			if($('.product-bestseller-details .price-info-product').length > 0 || $('.product-item-details').length > 0 || $('.category-item').length > 0 ){
+				if(item.length > 0){
+					var maxHeightElement = 0;
+					item.each(function(){
+						if($(this).height() > maxHeightElement){
+							maxHeightElement = $(this).height();
+						}
+					});
+					if(maxHeightElement > 0){
+						item.height(maxHeightElement);					
+					}
+					$(window).resize(function(){
+						item.css('height','');
+						var maxHeightElement = 0;
+						item.each(function(){
+							if($(this).height() > maxHeightElement){
+								maxHeightElement = $(this).height();
+							}
+						});
+						if(maxHeightElement > 0){
+							item.height(maxHeightElement);
+						}
+					});
+				}
+			}
+		}
+		setHeight(priceBeseller);
+		setHeight(nameBeseller);
+		setHeight(imageBeseller);
+		setHeight(nameProduct);
+		setHeight(nameCategory);
+		setHeight(priceRelated);	
+	});
+</script>
+<script type="text/javascript">
+	jQuery(document).ready(function(){
+		var heightText = jQuery('.block-feature-child .text-block p');
+		function setHeight(item) {
+			if(jQuery('.block-feature-child .text-block').length > 0 ){
+				if(item.length > 0){
+					var maxHeightElement = 0;
+					item.each(function(){
+						if(jQuery(this).height() > maxHeightElement){
+							maxHeightElement = jQuery(this).height();
+						}
+					});
+					if(maxHeightElement > 0){
+						item.height(maxHeightElement);					
+					}
+					jQuery(window).resize(function(){
+						item.css('height','');
+						var maxHeightElement = 0;
+						item.each(function(){
+							if(jQuery(this).height() > maxHeightElement){
+								maxHeightElement = jQuery(this).height();
+							}
+						});
+						if(maxHeightElement > 0){
+							item.height(maxHeightElement);
+						}
+					});
+				}
+			}
+		}
+		setHeight(heightText);
+	});	
+</script>

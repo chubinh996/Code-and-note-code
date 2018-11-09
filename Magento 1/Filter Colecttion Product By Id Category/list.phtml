@@ -1,0 +1,338 @@
+<?php
+/**
+ * Magento
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE_AFL.txt.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@magentocommerce.com so we can send you a copy immediately.
+ *
+ * DISCLAIMER
+ *
+ * Do not edit or add to this file if you wish to upgrade Magento to newer
+ * versions in the future. If you wish to customize Magento for your
+ * needs please refer to http://www.magentocommerce.com for more information.
+ *
+ * @category    design
+ * @package     base_default
+ * @copyright   Copyright (c) 2013 Magento Inc. (http://www.magentocommerce.com)
+ * @license     http://opensource.org/licenses/afl-3.0.php  Academic Free License (AFL 3.0)
+ */
+?>
+<?php
+/**
+ * Product list template
+ *
+ * @see Mage_Catalog_Block_Product_List
+ */
+?>
+<?php
+$_productCollection = $this->getLoadedProductCollection()->addAttributeToSelect('image');
+$productCollectionCustom = $this->getProductCollectionCustom();
+$_helper = $this->helper('catalog/output');
+$helper = Mage::helper('catalog/product');
+$setting = Mage::helper('yomarketsettings');
+$vendor = Mage::registry('vendor');
+?>
+<div class="tab-cate">
+    <?php 
+        $cpBlock = $this->getLayout()->getBlockSingleton('vendorsproduct/company');
+        $vendor_id = $this->getVendorId();
+        $cpBlock->setVendorId($vendor_id);
+        $supplierId = $cpBlock->getVendor()->getVendorId();
+    ?>
+    <?php 
+    $_categories = Mage::getModel('catalog/category')->getCollection();
+    $_categories->addAttributeToSelect('*');
+    $_categories->addAttributeToFilter('is_active', 1);
+    $_categories->addAttributeToFilter('include_in_menu', 1);
+    $_categories->addOrderField('position', 'asc');
+    $_collectioncategory = $_categories->load();
+    $rootCategoryId = Mage::app()->getStore($storeId)->getRootCategoryId();
+    $url_clear = Mage::getBaseUrl().'supplier/'.$supplierId.'/?tab=category'; 
+    $cate_id == NULL;
+    if (isset($_GET['id'])) {
+        $cate_id = $_GET['id'];
+    }
+    ?>
+    <?php if (count($_collectioncategory) > 0): ?>
+        <div class="list-category-name">
+            <?php foreach ($_collectioncategory as $_category): ?>
+                <?php if ($_category->getParentId() == $rootCategoryId): ?>  
+                    <div class="item-cate">    
+                    <?php $url_cate = Mage::getBaseUrl().'supplier/'.$supplierId.'/?tab=category&id='.$_category->getId(); ?>
+                    <?php if ($_category->getId() == $cate_id): ?>
+                        <a class="active" href="javascript:void(0)"><?php echo $_category->getName(); ?></a>
+                    <?php else: ?>
+                        <a href="<?php echo  $url_cate; ?>"><?php echo $_category->getName(); ?></a>
+                    <?php endif ?>
+                    </div>    
+                <?php endif; ?>
+            <?php endforeach ?>  
+            <?php if (isset($_GET['id'])): ?>
+                <div class="item-cate clear-cate"> 
+                    <a href="<?php echo  $url_clear; ?>"><i class="fa fa-times" aria-hidden="true"></i></a>
+                </div>  
+            <?php endif ?>
+        </div>
+    <?php endif ?>
+</div>
+<div id="product-list-container">
+    <div class="row category-products category-big-shop"> 
+        <?php if (!$_productCollection->count()): ?>
+            <div class="col-md-12">
+                <p class="note-msg"><?php echo $this->__('There are no products matching the selection.'); ?></p>
+            </div>
+        <?php else: ?>
+            <div class="col-sm-12" style="background:#fff;">
+                <div class="page-title category-title">
+                    <h1><?php echo $this->getCategoryTitle(); ?></h1>
+                </div>
+                <div class="col-md-12">
+                    <?php echo $this->getToolbarHtml(); ?>
+                </div>
+
+                <?php // List mode ?>
+                <?php if ($this->getMode() != 'grid'): ?>
+                    <?php $_iterator = 0; ?>
+                    <ol class="products-list links-border" id="products-list">
+                        <?php $count_product = 1; ?>
+						<?php count($_productCollection); ?>
+                        <?php foreach ($_productCollection as $_product): ?>
+                            <?php $p = Mage::getModel('catalog/product')->load($_product->getId()); ?>
+                            <?php
+                            $item_class = 'odd';
+                            if ($count_product % 2 == 0) {
+                                $item_class = 'even';
+                            }
+                            ?>
+                            <li class="item <?php echo $item_class; ?>">
+                                <div class="col-md-3 col-sm-3 col-xs-12">
+                                    <?php if ($setting->getProductsList_ShowThumbnail()): ?>
+                                        <a class="product-image" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true); ?>" href="<?php echo $this->getUrl().$p->getUrlKey().$helper->getProductUrlSuffix(); ?>">
+                                            <?php if ($setting->getProductsList_ShowLabel()): ?>
+                                                <?php Mage::helper('productlabels')->display($_product); ?>
+                                            <?php endif; ?>
+                                            <img alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true); ?>" src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($setting->getProductsList_Width(195), $setting->getProductsList_Height()); ?>" class="img-responsive">
+                                        </a>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="col-md-6 col-sm-6 col-xs-12">
+                                    <div class="f-fix">
+                                        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                                        <?php if ($setting->getProductsList_ShowProductName()): ?>
+                                            <h2 class="product-name">
+
+                                                <a title="<?php echo $_productNameStripped; ?>" href="<?php echo $this->getUrl().$p->getUrlKey().$helper->getProductUrlSuffix(); ?>">
+                                                    <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                                                </a>
+                                            </h2>
+                                            <?php
+                                            $rating = Mage::getModel('rating/rating')->getEntitySummary($_product->getId());
+                                            $ratings = $rating->getSum() / $rating->getCount();
+                                            ?>
+                                            <div class="ratings">
+                                                <div class="rating-box">
+                                                    <?php if ($ratings): ?>
+                                                        <div class="rating" style="width:<?php echo (int) $ratings; ?>%"></div>
+                                                    <?php else: ?>
+                                                        <div class="rating" style="width:0%"></div>
+                                                    <?php endif; ?>
+                                                </div>                                            
+                                            </div>
+                                        <?php endif; ?>
+                                        <div>
+                                            <?php $p = Mage::getModel('catalog/product')->load($_product->getId()); ?>
+                                            <?php echo $p->getAttributeText('mgs_brand'); ?>, <?php echo $p->getData('model'); ?>
+
+                                            <br /><?php echo $p->getAttributeText('country_of_manufacture'); ?></div>
+                                            <div class="controls">
+                                                <?php if ($_product->isSaleable()): ?>
+                                                <!-- <div class="add-to-cart">
+                                                    <button onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>');" class="btn-cart btn btn-primary btn-xs" title="<?php echo $this->__('Add to Cart'); ?>" type="button">
+                                                <?php echo $this->__('Add to Cart'); ?>
+                                                    </button>
+                                                </div> -->
+                                            <?php endif; ?>
+                                            <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                <a href="<?php echo $_compareUrl; ?>" class="f-left link-compare" title="<?php echo $this->__('Add to Compare'); ?>">
+                                                    <?php echo $this->__('Add to Compare'); ?>
+                                                </a>
+                                            <?php endif; ?>
+                                            <a style="margin-left: 10px;" href="#" onclick="jQuery('#em_quickshop_handler').click(); return false;" class="f-left link-compare" title="<?php echo $this->__('Quickview'); ?>">
+                                                <?php echo $this->__('Quickview'); ?>
+                                            </a>
+                                            <ul class="icon-links">
+                                                <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                    <!-- <li>
+                                                        <button onclick="setLocation('<?php echo $_compareUrl; ?>')" title="<?php echo $this->__('Add to Compare'); ?>" type="button">
+                                                            <em class="fa fa-retweet"></em>
+                                                        </button>
+                                                    </li> -->
+                                                <?php endif; ?>
+                                                <li class="li-quickview">
+            <!--                                                <button onclick="jQuery('#em_quickshop_handler').click(); return false;" class="btn-quickview quick-view" title="<?php echo $this->__('Quickview'); ?>" type="button">
+                                                        <em class="fa fa-search"></em>
+                                                    </button>-->                                                
+                                                </li>
+                                                <?php if ($setting->getProductsList_ShowAddto()): ?>
+                                                    <?php if ($this->helper('wishlist')->isAllow()): ?>
+                                                        <!-- <li>
+                                                            <button onclick="setLocation('<?php echo $this->helper('wishlist')->getAddUrl($_product); ?>')" title="<?php echo $this->__('Add to Inquiry List'); ?>" type="button">
+                                                                <em class="fa fa-heart"></em>
+                                                            </button>
+                                                        </li> -->
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </div>
+                                        <div class="desc std">
+                                            <div><?php // echo $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description');     ?></div>
+                                            <!-- <a class="link-learn" title="<?php echo $_productNameStripped; ?>" href="<?php echo $_product->getProductUrl(); ?>">
+                                            <?php echo $this->__('Learn More'); ?>
+                                        </a> -->
+                                    </div>
+                                    <?php echo $this->getLayout()->createBlock('vendorsproduct/company')->setVendorId($_product->getVendorId())->setTemplate('ves_vendorsproduct/company.phtml')->toHtml(); ?>
+                                </div>
+                            </div>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <?php
+                                if ($setting->getProductsList_ShowPrice()) {
+                                    echo $this->getPriceHtml($_product, true);
+                                }
+                                ?>
+            <!--                                <form action="<?php echo $this->getAddToCartUrl($_product) ?>" class="addtocart-form" method="post" id="product_addtocart_form_<?php echo $_product->getId() ?>"<?php if ($_product->getOptions()): ?> enctype="multipart/form-data"<?php endif; ?>>
+                                    <?php if (!$_product->isGrouped()): ?>
+                                                             <label for="qty-<?php echo $_product->getId() ?>"><?php echo $this->__('Quantity') ?></label>
+                                                             <input type="text" name="qty" id="qty-<?php echo $_product->getId() ?>" class="qty" maxlength="12" value="<?php echo ($this->getMinimalQty($_product) ? $this->getMinimalQty($_product) : 1) ?>" />
+                                    <?php endif; ?>
+                                         <button type="button" onclick="this.form.submit()" class="btn btn-default btn-cart btn-primary">
+                                            <span><?php echo $this->__('Add to Cart') ?></span>
+                                        </button>
+                                    </form>-->
+                                    <button onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>');" class="f-right btn-cart btn btn-primary btn-xs" title="<?php echo $this->__('Add to Cart'); ?>" type="button">
+                                        <?php echo $this->__('Add to Cart'); ?>
+                                    </button>
+                                    <div class="clearfix"></div>
+                                    <a class="f-right btn btn-default" href="<?php echo $this->helper('wishlist')->getAddUrl($_product); ?>" title="<?php echo $this->__('Add to Inquiry List'); ?>">
+                                        <?php echo $this->__('Add to Inquiry List'); ?>
+                                    </a>
+                                </div>
+                            </li>
+                            <?php $count_product++; ?>
+                        <?php endforeach; ?>
+                    </ol>
+                    <script type="text/javascript">decorateList('products-list', 'none-recursive');</script>
+
+                <?php else: ?>
+
+                    <?php // Grid Mode ?>
+                    <?php $_collectionSize = $_productCollection->count() ?>
+                    <?php if ($_collectionSize > 0): ?>
+                        <ul class="products-grid row-4">
+                            <?php foreach ($_productCollection as $_product): ?>
+                                <?php $p = Mage::getModel('catalog/product')->load($_product->getId());?>
+                                <li class="item col-md-3 col-sm-6 col-xs-12">
+                                    <div class="product-info-box product-content">
+                                        <div class="image-container product-top">
+                                            <?php if ($setting->getProductsGrid_ShowThumbnail()): ?>
+                                                <a class="product-image" title="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true); ?>" href="<?php echo $this->getUrl().$p->getUrlKey().$helper->getProductUrlSuffix(); ?>">
+                                                    <img class="img-responsive" alt="<?php echo $this->stripTags($this->getImageLabel($_product, 'small_image'), null, true); ?>" src="<?php echo $this->helper('catalog/image')->init($_product, 'small_image')->resize($setting->getProductsGrid_Width(195), $setting->getProductsGrid_Height()); ?>">
+                                                </a>
+                                            <?php endif; ?>
+                                            <div class="controls">
+                                                <ul class="icon-links">
+                                                    <li class="li-quickview">
+                                                        <button onclick="jQuery('#em_quickshop_handler').click(); return false;" class="btn-quickview quick-view" title="<?php echo $this->__('Quickview'); ?>" type="button">
+                                                            <em class="fa fa-search"></em>
+                                                        </button>
+                                                    </li>
+                                                    <?php if ($setting->getProductsList_ShowAddto()): ?>
+                                                        <?php if ($this->helper('wishlist')->isAllow()): ?>
+                                                            <li class="li-quickview">
+                                                                <a class="btn btn-default" href="<?php echo $this->helper('wishlist')->getAddUrl($_product); ?>" title="<?php echo $this->__('Add to Inquiry List'); ?>">
+                                                                    <em class="fa fa-heart"></em>
+                                                                </a>
+                                                            </li>
+                                                        <?php endif; ?>
+                                                        <?php if ($_compareUrl = $this->getAddToCompareUrl($_product)): ?>
+                                                            <li class="li-quickview">
+                                                                <a href="<?php echo $_compareUrl; ?>" class="btn btn-default link-compare" title="<?php echo $this->__('Add to Compare'); ?>">
+                                                                    <em class="fa fa-retweet"></em>
+                                                                </a>
+                                                                <!-- <button onclick="setLocation('<?php echo $_compareUrl; ?>')" title="<?php echo $this->__('Add to Compare'); ?>" type="button">
+                                                                    <em class="fa fa-retweet"></em>
+                                                                </button> -->
+                                                            </li>
+                                                        <?php endif; ?>
+                                                    <?php endif; ?>
+                                                </ul>
+                                            </div>
+                                            <?php
+                                            /* if ($setting->getProductsGrid_ShowReviews()) {
+                                              if ($_product->getRatingSummary()) {
+                                              echo $this->getReviewsSummaryHtml($_product, 'short');
+                                              }
+                                          } */
+                                          ?>
+                                          <?php
+                                          if ($setting->getProductsGrid_ShowLabel()) {
+                                            Mage::helper('productlabels')->display($_product);
+                                        }
+                                        ?>
+                                    </div>
+                                    <div class="product-desc">
+                                        <?php $_productNameStripped = $this->stripTags($_product->getName(), null, true); ?>
+                                        <?php if ($setting->getProductsList_ShowProductName()): ?>
+                                            <h4 class="product-name">
+
+                                                <a title="<?php echo $_productNameStripped; ?>" href="<?php echo $this->getUrl().$p->getUrlKey().$helper->getProductUrlSuffix(); ?>">
+                                                    <?php echo $_helper->productAttribute($_product, $_product->getName(), 'name'); ?>
+                                                </a>
+                                            </h4>
+                                            <?php
+                                            $rating = Mage::getModel('rating/rating')->getEntitySummary($_product->getId());
+                                            $ratings = $rating->getSum() / $rating->getCount();
+                                            ?>
+                                            <div class="ratings">
+                                                <div class="rating-box">
+                                                    <?php if ($ratings): ?>
+                                                        <div class="rating" style="width:<?php echo (int) $ratings; ?>%"></div>
+                                                    <?php else: ?>
+                                                        <div class="rating" style="width:0%"></div>
+                                                    <?php endif; ?>
+                                                </div>                                            
+                                            </div>
+                                        <?php endif; ?>
+                                        <?php
+                                        if ($setting->getProductsList_ShowPrice()) {
+                                            echo $this->getPriceHtml($_product, true);
+                                        }
+                                        ?>
+                                        <?php if ($_product->isSaleable()): ?>
+                                            <div class="add-to-cart">
+                                                <button onclick="setLocation('<?php echo $this->getAddToCartUrl($_product) ?>');" class="btn-cart btn btn-primary btn-xs" title="<?php echo $this->__('Add to Cart'); ?>" type="button">
+                                                    <?php echo $this->__('Add to Cart'); ?>
+                                                </button>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                <?php endif; ?>
+            <?php endif; ?>
+        </div>
+
+    <?php endif; ?>
+</div>
+</div>
+<?php
+//echo $this->getLayout()->createBlock('catalog/product_compare_sidebar')->setTemplate('fancycompare/fancycompare.phtml')->toHtml();
+?>

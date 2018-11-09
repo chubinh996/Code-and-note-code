@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<config>
+    <sections>
+        <settlementdiscount translate="label" module="settlementdiscount">
+            <class>separator-top</class>
+            <label>Settlement Discount</label>
+            <tab>catalog</tab>
+            <sort_order>60</sort_order>
+            <show_in_default>1</show_in_default>
+            <show_in_website>1</show_in_website>
+            <show_in_store>1</show_in_store>
+            <groups>
+                <general translate="label">
+                    <label>General</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>1</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <settlementdiscount translate="label comment">
+                            <label>Settlement Discount for Single Price in %</label>
+                            <comment>Enter '10' for "10%" discount</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>0</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </settlementdiscount>
+                        <settlementdiscountqty translate="label comment">
+                            <label>Settlement Discount for qty price in %</label>
+                            <comment>Enter discount in "%" for qty price</comment>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </settlementdiscountqty>
+                    </fields>
+                </general>
+            </groups>
+        </settlementdiscount>
+    </sections>
+</config>

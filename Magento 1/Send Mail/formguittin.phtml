@@ -1,0 +1,3 @@
+<form enctype="multipart/form-data" method="post" action="<?php echo Mage::getUrl('email/index/index'); ?>">
+              <input type="hidden" value="<?php echo $_product->getProductUrl(); ?>" name="url" id="url">
+              <input type="hidden" value="<?php echo $_product->getName(); ?>" name="name_product" id="name_product">

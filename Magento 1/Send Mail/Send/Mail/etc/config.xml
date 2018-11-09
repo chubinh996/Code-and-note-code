@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+  <config>
+     <modules>
+        <Send_Mail>
+          <version>0.1.0</version>
+        </Send_Mail>
+     </modules>
+     <frontend>
+       <routers>
+          <routeurfrontend>
+              <use>standard</use>
+              <args>
+                 <module>Send_Mail</module>
+                 <frontName>email</frontName>
+              </args>
+           </routeurfrontend>
+       </routers>
+    </frontend>
+</config>

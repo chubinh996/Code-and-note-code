@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Category left navigation
+ *
+ * @var $block \Magento\Catalog\Block\Navigation
+ */
+?>
+<?php if (!$block->getCategory()) {
+    return;
+} ?>
+<?php $_categories = $block->getCurrentChildCategories(); 
+//$categoryHelper = $this->getCategoryHelper();
+//$_outputhelper = $this->helper('Magento\Catalog\Helper\Output
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+?>
+<?php $_count = is_array($_categories) ? count($_categories) : $_categories->count(); ?>
+<?php if ($_count): ?>
+    <div class="title-landing-category">
+        <h2>Shop by Categories</h2>
+    </div>
+    
+    <div class="block filter">
+        <div class="content">
+            <dl class="options" id="narrow-by-list2">
+                <dd>
+                    <ol class="items">
+                        <div class="row">
+                            <?php foreach ($_categories as $_category): ?>
+                                <?php if ($_category->getIsActive()): ?>
+                                    <li class="item col-xs-12 col-sm-6 col-md-4">
+                                        <div class="img-category">
+                                            <?php
+
+                                            $category = $objectManager->create('Magento\Catalog\Model\Category')->load($_category->getId());
+                                            ?>
+                                            <div><img class="img-responsive" src="<?php echo $category->getImageUrl(); ?>"></div>
+                                            <div class="text-category">
+                                                <h2><?php echo $_category->getName(); ?></h2>
+                                                <div class="button-category">
+                                                    <a class="btn btn-default" href="<?= $block->getCategoryUrl($_category) ?>">Shop</a>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </li>
+                                <?php endif; ?>
+                            <?php endforeach ?>
+                        </div>
+                    </ol>
+                </dd>
+            </dl>
+        </div>
+    </div>
+<?php endif; ?>

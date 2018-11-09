@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Rycoweb_AllProducts>
+            <version>1.0.0</version>
+        </Rycoweb_AllProducts>
+    </modules>   
+    <global>
+        <blocks>
+            <allproducts>
+                <class>Rycoweb_AllProducts_Block</class>
+            </allproducts>
+        </blocks>
+    </global>
+</config>

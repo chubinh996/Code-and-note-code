@@ -1,0 +1,15 @@
+<?php
+$objectManager = Magento\Framework\App\ObjectManager::getInstance();
+$brand = $objectManager->create('\MGS\Brand\Model\Brand');
+$_product = $block->getProduct();
+$brandId = $_product->getData('mgs_brand');
+if ($brandId) {
+	$collection = $brand->getCollection()->addFieldToFilter('option_id', ['eq' => $brandId]);
+	
+	$brandUrlImage = $collection->getFirstItem()->getSmallImage();
+	?>
+	<img src="<?php echo $block->getBaseUrl().'pub/media/'. $brandUrlImage; ?>" alt="">
+	<?php
+}
+ 
+?>

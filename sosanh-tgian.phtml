@@ -1,0 +1,27 @@
+<?php
+
+date_default_timezone_set('Australia/Sydney');
+
+function is_between_times( $start = null, $end = null ) {
+    if ( $start == null ) $start = '00:00';
+    if ( $end == null ) $end = '23:59';
+  return ( $start <= '03:00am' && '03:00am' <= $end );
+}
+
+echo 'The current time is ' . date( 'H:ia' ) . '.<br>';
+
+// Specify range start and end.
+if ( is_between_times( '06:00', '17:30' ) ) {
+    echo 'hiện';
+} else {
+    echo 'ẩn';
+}
+
+// Specify range start.
+//if ( is_between_times( '06:00', null ) ) {
+//echo 'Current time is after 6:00 am.<br>';
+//} else {
+//echo 'Current time is not after 6:00 am.<br>';
+//}
+
+

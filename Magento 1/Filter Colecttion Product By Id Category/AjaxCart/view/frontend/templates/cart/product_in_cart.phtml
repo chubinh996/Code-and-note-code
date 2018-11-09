@@ -1,0 +1,50 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$cart = $objectManager->get('\Magento\Checkout\Model\Session')->getQuote();
+$result = $cart->getAllItems();
+$image = 'product_thumbnail_image';
+?>
+<?php if (count($result)): ?>
+	<div class="product_in_cart owl-carousel">
+		<?php foreach ($result as $cartItem): ?>
+			<?php if ($cartItem->getProduct()->getTypeId() != \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE): ?>
+				<div>
+					<?php  
+					$_imagehelper = $this->helper('Magento\Catalog\Helper\Image');
+					$urlThumbnailImage = $_imagehelper->init($cartItem->getProduct(), $image)->resize(40,40)->getUrl();
+					?>
+					<img src="<?php echo $urlThumbnailImage; ?>" alt="<?php echo $cartItem->getProduct()->getName(); ?>">
+				</div>
+			<?php endif ?>	
+		<?php endforeach ?>
+	</div>
+	<script type="text/javascript">
+		require([
+			'jquery',
+			'mgs/owlcarousel'
+			], function(jQuery){
+				(function($) {
+					$('.product_in_cart').owlCarousel({
+						nav: true,
+						dots: false,
+						responsiveClass:true,
+						navText: ["<i class='pe-7s-angle-left'></i>","<i class='pe-7s-angle-right'></i>"],
+						responsive:{
+							0:{
+								items:1
+							},
+							480:{
+								items:1
+							},
+							768:{
+								items:1
+							},
+							992:{
+								items:4
+							}
+						}
+					});
+			})(jQuery);
+		});
+	</script>
+<?php endif ?>

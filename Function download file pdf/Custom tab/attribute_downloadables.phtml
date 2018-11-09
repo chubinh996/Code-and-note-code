@@ -1,0 +1,77 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * Product view template
+ *
+ * @see \Magento\Catalog\Block\Product\View
+ */
+?>
+<?php
+$_helper = $this->helper('Magento\Catalog\Helper\Output');
+$_product = $block->getProduct();
+$_call = $block->getAtCall();
+$_code = $block->getAtCode();
+$_className = $block->getCssClass();
+$_attributeType = $block->getAtType();
+$_attributeAddAttribute = $block->getAddAttribute();
+
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $_objectManager->get('Magento\Store\Model\StoreManagerInterface'); 
+$currentStore = $storeManager->getStore();
+$mediaUrl = $currentStore->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+if ($_attributeType == 'text') {
+	$_attributeValue = ($_helper->productAttribute($_product, $_product->$_call(), $_code)) ? $_product->getAttributeText($_code) : '';
+} elseif($_attributeType == 'list'){
+	$_arrValue = $_product->getAttributeText($_code);
+	$_attributeValue = implode(', ', (array)$_arrValue);
+}else{
+	$_attributeValue = $_helper->productAttribute($_product, $_product->$_call(), $_code);
+}
+
+?>
+
+<?php 
+	// Explore attribute to array
+$arr_pdfs = explode(",",$_attributeValue);
+?>
+
+<div class="product attribute <?php /* @escapeNotVerified */ echo $_className?>">
+	<div class="value" <?php /* @escapeNotVerified */ echo $_attributeAddAttribute;?>>
+		<!-- <a href="<?php //echo $this->getBaseUrl() ?>file_download.php?filename=pub/media/upload_pdf/<?php //echo $_attributeValue; ?>"></a> -->
+		<div class="collateral-box box-collateral box-attachments" id="box_attachments">
+			<h4>Product Attachments</h4>
+			<div class="collateral-box attachment-specs">
+				<table cellspacing="0" id="product-attachment-specs-table" class="data-table">
+					<tbody>
+						<?php foreach ($arr_pdfs as $arr_pdf): ?>
+							<tr class="odd">							
+								<td class="label">
+									<a class="prod-attach" target="_blank" title="" href="<?php echo $this->getBaseUrl() ?>file_download.php?filename=pub/media/upload_pdf/<?php echo $arr_pdf; ?>">
+										<span class="attach-img">
+											<img src="<?php echo $mediaUrl.'wysiwyg/pdf.png'; ?>" alt="Download File">
+										</span>
+										<span class="attach-title" style="text-transform: uppercase; text-decoration: underline;"><?php /* @escapeNotVerified */ echo str_replace('_',' ',$arr_pdf); ?></span>
+										<?php 
+											// $filesize = $mediaUrl.'upload_pdf/'.$arr_pdf;
+											// $filesize = 'pub/media/upload_pdf/'.$arr_pdf;
+											$filesize = $arr_pdf;
+											//echo filesize($filesize);
+										?>
+									</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	
+</div>

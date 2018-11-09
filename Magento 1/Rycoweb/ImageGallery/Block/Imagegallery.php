@@ -1,0 +1,55 @@
+<?php
+/**
+* @category Rycoweb
+* @package Rycoweb_ImageGallery
+*/ 
+
+class Rycoweb_ImageGallery_Block_Imagegallery extends Mage_Core_Block_Template {
+
+    protected $_collection = null;
+    const CACHE_TAG = 'imagegallery_imagegallery';
+
+    public function __construct() {
+
+		$this->addData(array(
+            'cache_lifetime' => 86400,
+            'cache_tags' => array(Rycoweb_Imagegallery_Block_Imagegallery::CACHE_TAG,
+                Mage_Core_Model_Store_Group::CACHE_TAG),
+        ));
+
+        parent::__construct();
+        $this->_init();
+
+        if (!$this->helper('imagegallery')->canShowGallery()) {
+            return false;
+        }
+
+        //if ($this->hasData('template')) {
+            $this->setTemplate('imagegallery/imagegallery.phtml');
+        //}
+
+        $this->setCollection($this->_collection);
+    }
+
+	public function getCacheKeyInfo() {
+        $cacheKeyInfo = array(
+            'IMAGEGALLERY_IMAGEGALLERY',
+            Mage::app()->getStore()->getId(),
+            Mage::getDesign()->getPackageName(),
+            Mage::getDesign()->getTheme('template'),
+            'template' => $this->getTemplate(),
+            'name' => $this->getNameInLayout()
+        );
+        return $cacheKeyInfo;
+    }
+
+    protected function _init() {
+        if ($this->_collection == null) {
+            $this->_collection = Mage::getSingleton('imagegallery/imagegallery')->getCollection()
+                    ->addFieldToFilter('status', 1)
+                    ->addFieldToFilter('store_id', Mage::app()->getStore()->getId());            
+        }
+    }    
+
+}
+

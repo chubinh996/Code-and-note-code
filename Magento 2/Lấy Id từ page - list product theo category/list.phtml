@@ -1,0 +1,54 @@
+<?php 
+$categoryId = $this->getData('category_id');
+$_objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$category  = $_objectManager->create('Magento\Catalog\Model\Category')->load($categoryId);
+$RdscHelper = $this->helper('RDSC\Custom\Helper\Data');
+$categoryProducts = $category->getProductCollection()->addAttributeToSelect('*');
+$_imagehelper = $this->helper('Magento\Catalog\Helper\Image');
+$image = 'category_page_grid';
+$abstractProductBlock = $block->getLayout()->createBlock('\Magento\Catalog\Block\Product\AbstractProduct');
+ ?>
+<div class="page-width">
+	<div class="section-block">
+		<div class="grid row category-block">
+			<div class="grid_item category-item">
+				<a href="<?php echo $category->getUrl(); ?>" class="category-card" title="<?php echo $category->getName(); ?>" style="background-image: url('<?php echo $_imgUrl = $RdscHelper->getCategoryThumbnailUrl($category);?>')">
+					<div class="category-info">
+						<p class="h1 category-name"><?php echo $category->getName(); ?></p>
+						<p class="view-all">View all</p>
+					</div>
+				</a>
+			</div>
+			<?php $i = 0; ?>
+			<?php foreach ($categoryProducts as $product):?>
+			<?php $i++; ?>
+			<div class="grid_item category-item">
+				<a href="<?php echo $product->getProductUrl(); ?>" title="<?php echo $product->getProductUrl(); ?>" class="product-card">
+					<div class="product-image-wrapper">
+						<?php
+				            $productImage = $_imagehelper->init($product, $image)->constrainOnly(TRUE)->keepAspectRatio(TRUE)->keepTransparency(TRUE)->keepFrame(FALSE)->resize(480, 480);
+				            $productImageUrl = $productImage->getUrl();
+			            ?>
+						<img src="<?php echo $productImageUrl; ?>" alt="<?php  echo $product->getName(); ?>" class="product-image">
+					</div>
+					<div class="product-info">
+						<div class="product-brand">
+							<?php echo $category->getName(); ?>
+						</div>
+						<div class="product-name">
+							<?php  echo $product->getName(); ?>
+						</div>
+						<div class="product-price">
+							<?php echo $abstractProductBlock->getProductPrice($product); ?>
+						</div>
+					</div>
+					<div class="product-overlay">
+						<span class="btn product-overlay-btn">View</span>
+					</div>
+				</a>
+			</div>
+			<?php if ($i >= 4) { break; } ?>
+			<?php endforeach; ?>
+		</div>
+	</div>
+</div>

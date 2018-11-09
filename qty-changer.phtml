@@ -1,0 +1,40 @@
+<div class="control qty">
+    <input id="cart-<?= /* @escapeNotVerified */ $_item->getId() ?>-qty"
+    name="cart[<?= /* @escapeNotVerified */ $_item->getId() ?>][qty]"
+    data-cart-item-id="<?= $block->escapeHtml($_item->getSku()) ?>"
+    value="<?= /* @escapeNotVerified */ $block->getQty() ?>"
+    type="number"
+    size="4"
+    title="<?= $block->escapeHtml(__('Qty')) ?>"
+    class="input-text qty"
+    data-validate="{required:true,'validate-greater-than-zero':true}"
+    data-role="cart-item-qty" min="1"/>
+    <div class="qty-changer">
+        <a data-product-id="<?= /* @escapeNotVerified */ $_item->getId() ?>" href="javascript:void(0)" class="product_qty_dec"><i class="fa  fa-minus"></i></a>
+        <a data-product-id="<?= /* @escapeNotVerified */ $_item->getId() ?>" href="javascript:void(0)" class="product_qty_inc"><i class="fa  fa-plus"></i></a>
+    </div>
+</div> 
+<script type="text/javascript" charset="utf-8" async defer> 
+    require([
+        'jquery'      
+        ], function ($) {   
+            $(document).ready(function() {    
+                $('.product_qty_inc').click(function () {
+                    var pro_id = $(this).data('product-id');
+                    var qty_inc = parseInt('1'); 
+                    var p_qty = parseInt($('#cart-'+pro_id+'-qty').val());
+                    $('#cart-'+pro_id+'-qty').val(p_qty + qty_inc);
+                });
+                $('.product_qty_dec').click(function () {
+                    var pro_id = $(this).data('product-id');
+                    var qty_inc = parseInt('1');
+                    var p_qty = parseInt($('#cart-'+pro_id+'-qty').val());
+                    var f_qty = p_qty - qty_inc;
+                    if (f_qty <= 0) {
+                        f_qty = 1;
+                    }
+                    $('#cart-'+pro_id+'-qty').val(f_qty);
+                });
+            });
+        });
+    </script>
