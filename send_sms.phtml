@@ -1,0 +1,56 @@
+<?php
+
+require __DIR__ . '/twilio-php-master/Twilio/autoload.php';
+use Twilio\Rest\Client;
+
+class Mycode_ThankYourOrder_IndexController extends Mage_Core_Controller_Front_Action
+{
+	public function EmailAction()
+	{
+		// Mage::getModel('thankyourorder/email')->sendEmail(
+		// 	'thankyourorder_email_template', 
+		// 	array('name' => 'Dev', 'email' => 'sale@astir.com'), 
+		// 	'chubinh996@gmail.com', 
+		// 	'Dev', 
+		// 	'Test Email', 
+		// 	array('value' => 'thankyourorder')
+		// );
+		$email = $this->getRequest()->getPost('email');
+		
+		//get email in admin config
+		// $emailto = Mage::getStoreConfig('trans_email/ident_general/email');		
+		$emailto = 'chubinh996@gmail.com';		
+
+		//Send email
+		$headers = "From: " . $email . "\r\n";
+		$headers .= "Reply-To: ". $email . "\r\n";
+		$headers .= "CC: test@gmail.com";
+		$headers .= "MIME-Version: 1.0\r\n";
+		$headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+
+		$to_customer = $email;
+		$subject = 'Thank Your Order';
+		$message_customer = nl2br("Hi Binh");
+
+		mail($to_customer, $subject, $message_customer, $headers);
+		Mage::getSingleton('core/session')->addSuccess('Request your phone was sent success!');
+	}
+	public function SMSAction()
+	{
+		echo $msg = nl2br("Here's the link you requested to download our apps! \n iOS app: http://bit.ly/COTDApp \n Android app: \n http://bit.ly/COTDGooglePlay");
+		if (isset($_POST['mobile-number'])) {
+			$sid = 'AC5cbc6c89d97d4d92335e9cdf27940e43';
+			$token = '50093b162063f4816eefb6c47c8d9cf7';
+			$client = new Client($sid, $token);
+
+			$client->messages->create(
+				$_POST['mobile-number'],
+				array(
+					'from' => '+13365609457',
+					'body' => $msg
+				)
+			);
+			Mage::getSingleton('core/session')->addSuccess('Request your phone was sent success!');
+		}
+	}
+}  

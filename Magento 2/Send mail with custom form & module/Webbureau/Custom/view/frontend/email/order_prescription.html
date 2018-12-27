@@ -1,0 +1,46 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!--@subject {{trans "Order Prescription"}} @-->
+<!--@vars {
+"var comment":"Additional Comments",
+"var email":"Email",
+"var name":"Name",
+"var company_address":"Shipping Address",
+"var file_attachment":"File Attachment",
+"var telephone":"Phone No"
+} @-->
+
+{{template config_path="design/email/header_template"}}
+
+<table class="message-details">
+    <tr>
+        <td><b>{{trans "Name"}}</b></td>
+        <td>{{var name}}</td>
+    </tr>
+    <tr>
+        <td><b>{{trans "Email"}}</b></td>
+        <td>{{var email}}</td>
+    </tr>
+	<tr>
+        <td><b>{{trans "Shipping Address"}}</b></td>
+        <td>{{var company_address}}</td>
+    </tr>	
+    <tr>
+        <td><b>{{trans "Phone No"}}</b></td>
+        <td>{{var telephone}}</td>
+    </tr>
+	<tr>
+        <td><b>{{trans "Additional Comments"}}</b></td>
+        <td>{{var comment}}</td>
+    </tr>
+	<tr>
+        <td><b>{{trans "File Attachment"}}</b></td>
+        <td>{{var file_attachment}}</td>
+    </tr>
+</table>
+
+{{template config_path="design/email/footer_template"}}

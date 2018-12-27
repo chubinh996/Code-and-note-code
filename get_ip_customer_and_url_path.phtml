@@ -1,0 +1,14 @@
+<?php 
+	$referrer = $this->getRequest()->getServer('HTTP_REFERER');
+$explode = explode("/",$referrer);
+?>
+<form action="">
+	<input type="hidden" name="ip" value="<?php echo $_SERVER['REMOTE_ADDR']; ?>" />
+</form>
+
+<?php 
+                                  $test = 'http://ip-api.com/json/2.5.5.5?fields=61439';
+                                  $arrayT = json_decode($test);
+                                  //var_dump($arrayT);
+                                  echo date('e');
+                                 ?>

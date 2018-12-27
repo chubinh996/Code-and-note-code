@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+      <Mycode_ThankYourOrder>
+        <version>0.1.0</version>
+      </Mycode_ThankYourOrder>
+    </modules>
+    <frontend>
+      <routers>
+        <routeurfrontend>
+          <use>standard</use>
+          <args>
+            <module>Mycode_ThankYourOrder</module>
+            <frontName>thankyourorder</frontName>
+          </args>
+        </routeurfrontend>
+      </routers>
+    </frontend>
+    <global>
+      <template>
+        <email>
+          <thankyourorder_email_template translate="label" module="thankyourorder">
+            <label>Thank Your Order Email</label>
+            <file>thankyourorder_email.html</file>
+            <type>html</type>
+          </thankyourorder_email_template>
+        </email>
+      </template>
+    </global>
+</config>

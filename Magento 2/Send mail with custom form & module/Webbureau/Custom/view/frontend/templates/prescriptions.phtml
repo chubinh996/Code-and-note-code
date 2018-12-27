@@ -1,0 +1,121 @@
+<?php
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$customerSession = $objectManager->create('Magento\Customer\Model\Session');
+?>
+<?php if ($customerSession->isLoggedIn()): ?>
+    <section class="presc block-top">
+        <div class="grid-container">
+            <div class="grid-x grid-block-top">
+                <div class="medium-4 cell">
+                    <div class="presc-text">
+                        <h1><?php echo __('Upload your'); ?></h1>
+                        <span class="text-bold"><?php echo __('prescription'); ?></span> <span><?php echo __('now!'); ?></span>
+                    </div>
+                </div>
+                <div class="medium-6 cell">
+                    <img src="<?php echo $this->getViewFileUrl('images/prescription-feat2.png'); ?>" alt="<?php echo __('Prescription'); ?>">
+                </div>
+            </div>
+        </div>
+    </section>
+    <?php
+    $customer = $objectManager->create('Magento\Customer\Model\Customer')->load($customerSession->getCustomer()->getId());
+    $shippingAddressId = $customer->getDefaultShipping();
+    if ($shippingAddressId) {
+        $shippingAddress = $objectManager->create('Magento\Customer\Model\Address')->load($shippingAddressId);
+    }
+    ?>
+    <form enctype="multipart/form-data" class="form-your-order" method="post" action="<?php echo $block->getUrl('webbureau_custom/index/post'); ?>" data-hasrequired="<?= $block->escapeHtmlAttr(__('* Required Fields')) ?>"
+          data-mage-init='{"validation":{}}'>
+        <div class="grid-container grid-form">
+            <div class="grid-x grid-padding-x">
+                <div class="medium-12 cell upload-file">
+                    <ol>
+                        <p><?php echo __('Steps'); ?></p>
+                        <li><?php echo __('Choose photo file for upload'); ?></li>
+                        <li><?php echo __('Add comments, if you wish'); ?></li>
+                        <li><?php echo __('Submit order'); ?></li>
+                    </ol>
+                    <label for="exampleFileUpload" class="button button-add-file"><?php echo __('Choose File'); ?></label>
+                    <input type="file" name="file_attachment" id="exampleFileUpload" class="show-for-sr input-file" data-validate="{required:true}">
+                    <p class="name-file-return"></p>
+                </div>
+                <div class="medium-12 cell">
+                    <p class="text-shipping"><?php echo __('Shipping to:'); ?></p>
+                </div>
+                <div class="medium-12 cell form-group">
+                    <label><?php echo __('Name'); ?></label>
+                    <input type="text" name="name" id="name" value="<?php echo $customer->getName(); ?>" data-validate="{required:true}">
+                </div>
+                <div class="medium-12 cell form-group">
+                    <label><?php echo __('Company'); ?></label>
+                    <input type="text" name="company_address" id="company_address" value="<?php
+                    if ($shippingAddressId) {
+                        echo implode(' ', $shippingAddress->getStreet()) . ', ' . $shippingAddress->getCity() . ', ' . $shippingAddress->getRegion() . ' ' . $shippingAddress->getPostcode() . ', ' . $shippingAddress->getCountry();
+                    }
+                    ?>" data-validate="{required:true}">
+                </div>
+                <div class="medium-12 cell form-group">
+                    <label><?php echo __('Email'); ?></label>
+                    <input type="email" name="email" id="email" value="<?php echo $customer->getEmail(); ?>" data-validate="{required:true, 'validate-email':true}">
+                </div>
+                <div class="medium-12 cell form-group">
+                    <label><?php echo __('Mobile'); ?></label>
+                    <input type="number" name="telephone" id="telephone" value="<?php
+                    if ($shippingAddressId) {
+                        echo $shippingAddress->getTelephone();
+                    }
+                    ?>" data-validate="{required:true}">
+                </div>
+                <div class="medium-12 cell textarea">
+                    <label><?php echo __('Help Us to Help You - Comments'); ?></label>
+                    <textarea placeholder="<?php echo __('To OurPharmacy:'); ?>" rows="5" name="comment" id="comment"></textarea>
+                    <div class="text-note">
+                        <p><?php echo __('Let us know your instructions to us, if required. Examples:'); ?></p>
+                        <ul>
+                            <li><?php echo __('If you only want a price quote before ordering.'); ?></li>
+                            <li><?php echo __('Specify individual items to part fill your prescription.'); ?></li>
+                            <li><?php echo __('Book a future delivery date that suits you better.'); ?></li>
+                            <li><?php echo __('Any other preference or query to the pharmacist.'); ?></li>
+                            <p><?php echo __('We\'ll be right back to you if you need an answer.'); ?></p>
+                        </ul>
+                    </div>
+                </div>
+                <div class="medium-12 cell checkbox">
+                    <?php echo __('I agree to the Terms & Conitions, Privacy & Cookie Policy'); ?>
+                    <input type="checkbox" value="1" id="agree" name="agree" required>
+                    <span></span>
+                </div>
+                <div class="medium-12 cell">
+                    <div class="input-group-button">
+                        <input type="submit" class="button" value="<?php echo __('SUBMIT'); ?>">
+                    </div>
+                </div>  
+
+            </div>
+        </div>
+    </form>
+<?php endif; ?>
+<script type="text/javascript">
+    require([
+        'jquery'
+    ], function ($) {
+        $(document).ready(function () {
+            var fileInput = document.querySelector(".input-file"),
+                    button = document.querySelector(".button-add-file"),
+                    the_return = document.querySelector(".name-file-return");
+            button.addEventListener("keydown", function (event) {
+                if (event.keyCode == 13 || event.keyCode == 32) {
+                    fileInput.focus();
+                }
+            });
+            button.addEventListener("click", function (event) {
+                fileInput.focus();
+                return false;
+            });
+            fileInput.addEventListener("change", function (event) {
+                the_return.innerHTML = this.value;
+            });
+        });
+    });
+</script>
