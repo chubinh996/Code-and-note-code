@@ -55,8 +55,8 @@ class Mycode_ThankYourOrder_IndexController extends Mage_Core_Controller_Front_A
         $baseurl = Mage::getBaseUrl();
         $msg = nl2br("Here's the link you requested to download our apps!  iOS app: http://bit.ly/COTDApp  Android app:  http://bit.ly/COTDGooglePlay");
         if (isset($_POST['mobile-number'])) {
-        $sid = 'AC5cbc6c89d97d4d92335e9cdf27940e43';
-        $token = '50093b162063f4816eefb6c47c8d9cf7';
+        $sid = ''; //GET ON WEB TWILLO
+        $token = '';
         $client = new Client($sid, $token);
 
         $client->messages->create(
